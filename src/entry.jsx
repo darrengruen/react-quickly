@@ -48,6 +48,7 @@ const App = React.createClass({
  * Should be broken out into its own file
  */
 const Search = React.createClass({
+    // I would like to ping a "live" sites API to add true functionality
     searchIt: function() {
         ajax({
             url: 'http://jsonplaceholder.typicode.com/posts',
@@ -59,8 +60,10 @@ const Search = React.createClass({
     render: function() {
         return (
             <div>
+                <p>You can enter whatever you want</p>
+                {/* Keeping mind that this text input does not effect anything */}
                 <input type="text" ref="searchText" />
-                <button type="button" onClick={ this.searchIt }>Search</button>
+                <button type="button" onClick={ this.searchIt }>Submit</button>
             </div>
         )
     }
