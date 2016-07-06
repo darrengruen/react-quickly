@@ -1,6 +1,8 @@
 // Should refactor this to have each of the components in their own file
 
 // I was unable to find a "good" substitute for jquery.ajax
+// and since it's tried and true, we'll stick with it
+// not to mention we can do an import on only that module
 import { ajax } from 'jquery'
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -8,7 +10,9 @@ import ReactDOM from 'react-dom'
 /**
  * The main part of the App
  *
- * Should be broken out into its own file
+ * Should be broken out into its own file for importing
+ *
+ * This top level should be the only entry point for the data.
  */
 const App = React.createClass({
     getInitialState: ()=>({
@@ -16,6 +20,11 @@ const App = React.createClass({
         searchType: 'posts'
     }),
 
+    /**
+     * Callback to load the result into view.
+     * @param {object} data A JSON object with the result data
+     * @return void
+     */
     onSearchResult: function(data) {
         // Use react.addons.update instead
         this.setState({result: data})
@@ -56,7 +65,12 @@ const App = React.createClass({
  * Should be broken out into its own file
  */
 const Search = React.createClass({
-    // I would like to ping a "live" sites API to add true functionality
+
+    /**
+     * Hits the API and used the ajax.success method to invoke the parent
+     * components callback
+     * @return void
+     */
     searchIt: function() {
         let search = this.refs.searchText.value;
         ajax({
@@ -69,6 +83,7 @@ const Search = React.createClass({
     render: function() {
         return (
             <select className="form-control" id="seachText" ref="searchText" onChange={ this.searchIt}>
+                {/* this could be an object that is iterated over to make it more dynamic*/}
                 <option>-- Select --</option>
                 <option value="posts">Posts</option>
                 <option value="comments">Comments</option>
