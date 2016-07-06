@@ -13,6 +13,7 @@ import ReactDOM from 'react-dom'
 const App = React.createClass({
     getInitialState: ()=>({
         result: [],
+        searchType: 'posts'
     }),
 
     onSearchResult: function(data) {
@@ -23,19 +24,26 @@ const App = React.createClass({
     render: function() {
         return (
             <div>
-                <Search onSearchResult={ this.onSearchResult } />
-                <div>
-                    {
-                        // use lodash here
-                        this.state.result.map(function(item, index) {
-                            return (
-                                <div key={ index }>
-                                    title: { item.title }
-                                    <br/>
-                                </div>
-                            )
-                        })
-                    }
+                <div className="row">
+                    <div className="col-xs-4 col-xs-offset-4 text-center">
+                        <Search onSearchResult={ this.onSearchResult } />
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-xs-10 col-xs-offset-1">
+                        {
+                            // use lodash here
+                            this.state.result.map(function(item, index) {
+                                return (
+                                    <div className="well well-sm" key={ index }>
+                                        { item.title ? <h4>{ item.title}</h4> : "" }
+                                        { item.name ? <h4>{ item.name }</h4>  : "" }
+                                        { item.body ? <p>{ item.body }</p> : "" }
+                                    </div>
+                                )
+                            })
+                        }
+                    </div>
                 </div>
             </div>
         )
@@ -50,8 +58,9 @@ const App = React.createClass({
 const Search = React.createClass({
     // I would like to ping a "live" sites API to add true functionality
     searchIt: function() {
+        let search = this.refs.searchText.value;
         ajax({
-            url: 'http://jsonplaceholder.typicode.com/posts',
+            url: 'http://jsonplaceholder.typicode.com/' + search,
             method: 'GET',
             success: (data)=>this.props.onSearchResult(data)
         })
@@ -59,12 +68,15 @@ const Search = React.createClass({
 
     render: function() {
         return (
-            <div>
-                <p>You can enter whatever you want</p>
-                {/* Keeping mind that this text input does not effect anything */}
-                <input type="text" ref="searchText" />
-                <button type="button" onClick={ this.searchIt }>Submit</button>
-            </div>
+            <select className="form-control" id="seachText" ref="searchText" onChange={ this.searchIt}>
+                <option>-- Select --</option>
+                <option value="posts">Posts</option>
+                <option value="comments">Comments</option>
+                <option value="albums">Albums</option>
+                <option value="photos">Photos</option>
+                <option value="todos">To-dos</option>
+                <option value="users">Users</option>
+            </select>
         )
     }
 })
